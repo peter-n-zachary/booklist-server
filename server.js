@@ -10,8 +10,18 @@ const CLIENT_URL = process.env.CLIENT_URL;
 
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect();
+client.on('error', err => console.error(err));
 
+//application middleware
 app.use(cors());
+
+app.get('/api/v1/books', (req, res) => {
+    client.query(`SELECT book_id, title, author, image_url, isbn FROM books;`)
+    .then(results => res.send(results.rows))
+    .catch(console.error);
+});
+
+app.get('*', (req, res) => res.redirect(CLIENT_URL));
 
 app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 
