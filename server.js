@@ -41,9 +41,9 @@ app.post('/api/v1/books', bodyParser, (req, res) => {
 
 });
 
-app.delete('/api/v1/books/:book_id', (req, res) => {
-  client.query(`DELETE FROM books WHERE id=${req.params.book_id};`)
-    .then(() => res.sendStatus(201))
+app.delete('/api/v1/books/:id', (req, res) => {
+  client.query(`DELETE FROM books WHERE book_id=${req.params.id};`)
+    .then(() => res.sendStatus(204))
     .catch(console.error);
 });
 
