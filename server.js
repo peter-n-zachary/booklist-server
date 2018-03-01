@@ -17,9 +17,17 @@ app.use(cors());
 // app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 
 app.get('/api/v1/books', (req, res) => {
-  console.log('Server get triggered')
-
   client.query(`SELECT book_id, title, author, image_url, isbn FROM books;`)
+    .then(results => res.send(results.rows))
+    .catch(console.error);
+});
+
+app.get('/api/v1/books/:id', (req, res) => {
+  console.log('get triggered');
+
+  client.query(`SELECT * FROM books WHERE book_id=$1`,
+    [req.params.id]
+  )
     .then(results => res.send(results.rows))
     .catch(console.error);
 });
