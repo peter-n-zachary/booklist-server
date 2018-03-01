@@ -23,10 +23,10 @@ app.get('/api/v1/books', (req, res) => {
     .catch(console.error);
 });
 
-app.get('/api/v1/books/:id', (req, res) => {
+app.get('/api/v1/books/:book_id', (req, res) => {
+  console.log('app.get for single book');
 
-  client.query(`SELECT * FROM books WHERE book_id=$1`,
-    [req.params.id]
+  client.query(`SELECT * FROM books WHERE book_id=${req.params.book_id};`
   )
     .then(results => res.send(results.rows))
     .catch(console.error);
