@@ -24,8 +24,6 @@ app.get('/api/v1/books', (req, res) => {
 });
 
 app.get('/api/v1/books/:book_id', (req, res) => {
-  console.log('app.get for single book');
-
   client.query(`SELECT * FROM books WHERE book_id=${req.params.book_id};`
   )
     .then(results => res.send(results.rows))
@@ -35,13 +33,21 @@ app.get('/api/v1/books/:book_id', (req, res) => {
 app.post('/api/v1/books', bodyParser, (req, res) => {
   let {title, author, image_url, isbn, description} = req.body;
 
-  client.query(`INSERT INTO books(title, author, image_url, isbn, description) 
-    VALUES ($1, $2, $3, $4, $5);`, 
+  client.query(`INSERT INTO books (title, author, image_url, isbn, description) 
+    VALUES ($1, $2, $3, $4, $5);`,
     [title, author, image_url, isbn, description])
     .then(() => res.sendStatus(201))
     .catch(console.error);
 
 });
+
+app.delete('/api/v1/books/:book_id', (req, res) => {
+  client.query(`DELETE FROM books WHERE id=${req.params.book_id};`)
+    .then(() => res.sendStatus(201))
+    .catch(console.error);
+});
+
+
 
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 
