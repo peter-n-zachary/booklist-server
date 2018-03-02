@@ -41,33 +41,29 @@ app.post('/api/v1/books', bodyParser, (req, res) => {
 
 });
 
-// app.delete('/api/v1/books/:book_id', (req, res) => {
-//   client.query(`DELETE FROM books WHERE id=${req.params.book_id};`)
-//     .then(() => res.sendStatus(201))
-//     .catch(console.error);
-// });
-
 app.delete('/api/v1/book/delete', bodyParser, (request, response) => {
   client.query(`DELETE FROM books WHERE book_id=$1;`,
     [request.body.book_id])
     .then(response.send('book deleted'));
 });
 
-app.put('/api/v1/book-:id/update', bodyParser, (request, response) => {
+app.put('/api/v1/update/:book_id', bodyParser, (req, res) => {
+  console.log('hitting server');
   client.query(`
     UPDATE books
     SET author=$1, title=$2, isbn=$3, image_url=$4, description=$5
     WHERE book_id=$6;`,
     [
-      request.body.author,
-      request.body.title,
-      request.body.isbn,
-      request.body.image_url,
-      request.body.description,
-      request.body.book_id
+      req.body.author,
+      req.body.title,
+      req.body.isbn,
+      req.body.image_url,
+      req.body.description,
+      req.body.book_id
     ]
   )
-    .then(response.send('update complete'));
+    .then(() => res.sendStatus(201))
+    .catch(console.error);
 });
 
 
